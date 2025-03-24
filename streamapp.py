@@ -82,7 +82,7 @@ def save_to_google_sheet(df):
        
 
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        
+
          # explicitly create the service account dictionary
         gcp_secrets = st.secrets["gcp_service_account"]
 
@@ -99,8 +99,8 @@ def save_to_google_sheet(df):
             "client_x509_cert_url": gcp_secrets["client_x509_cert_url"],
             "universe_domain": gcp_secrets["universe_domain"]
 }
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(dict(st.secrets["gcp_service_account"]), scope)
-        client = gspread.authorize(creds)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
+        client = gspread.authorize(creds)        
         sheet = client.open(SHEET_NAME).sheet1
 
         existing = sheet.get_all_values()
