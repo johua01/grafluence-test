@@ -80,8 +80,7 @@ def save_to_google_sheet(df):
         from oauth2client.service_account import ServiceAccountCredentials
 
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-        json_key = json.dumps(st.secrets["gcp_service_account"])
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(json_key), scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(dict(st.secrets["gcp_service_account"]), scope)
         client = gspread.authorize(creds)
         sheet = client.open(SHEET_NAME).sheet1
 
