@@ -79,7 +79,26 @@ def save_to_google_sheet(df):
         import json
         from oauth2client.service_account import ServiceAccountCredentials
 
+       
+
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+        
+         # explicitly create the service account dictionary
+        gcp_secrets = st.secrets["gcp_service_account"]
+
+        credentials_dict = {
+            "type": gcp_secrets["type"],
+            "project_id": gcp_secrets["project_id"],
+            "private_key_id": gcp_secrets["private_key_id"],
+            "private_key": gcp_secrets["private_key"].replace("\\n", "\n"), # FIX: explicitly decode newlines
+            "client_email": gcp_secrets["client_email"],
+            "client_id": gcp_secrets["client_id"],
+            "auth_uri": gcp_secrets["auth_uri"],
+            "token_uri": gcp_secrets["token_uri"],
+            "auth_provider_x509_cert_url": gcp_secrets["auth_provider_x509_cert_url"],
+            "client_x509_cert_url": gcp_secrets["client_x509_cert_url"],
+            "universe_domain": gcp_secrets["universe_domain"]
+}
         creds = ServiceAccountCredentials.from_json_keyfile_dict(dict(st.secrets["gcp_service_account"]), scope)
         client = gspread.authorize(creds)
         sheet = client.open(SHEET_NAME).sheet1
